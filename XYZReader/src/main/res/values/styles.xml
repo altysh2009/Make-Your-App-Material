@@ -25,7 +25,7 @@
 
         <!-- theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">@color/theme_accent</item>
-
+        <item name="android:windowTranslucentStatus">true</item>
 
 
     </style>
