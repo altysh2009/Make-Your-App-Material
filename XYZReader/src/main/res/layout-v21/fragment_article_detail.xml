@@ -43,7 +43,6 @@
                 </FrameLayout>
 
 
-
                 <LinearLayout
                     android:id="@+id/meta_bar"
                     android:layout_width="match_parent"
@@ -52,9 +51,10 @@
                     android:layout_marginBottom="@dimen/detail_metabar_vert_padding"
                     android:background="#333"
                     android:orientation="vertical"
+                    android:paddingBottom="@dimen/detail_metabar_vert_padding"
                     android:paddingLeft="@dimen/detail_inner_horiz_margin"
                     android:paddingRight="@dimen/detail_inner_horiz_margin"
-
+                    android:paddingTop="@dimen/detail_metabar_vert_padding"
                     app:layout_collapseMode="pin"
                     app:layout_scrollFlags="scroll|enterAlways">
 
@@ -92,12 +92,12 @@
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginBottom="@dimen/fab_margin"
+            android:layout_gravity="bottom|end"
+            android:layout_marginBottom="@dimen/fab_margin"
             android:layout_marginEnd="@dimen/fab_margin"
             android:layout_marginRight="@dimen/fab_margin"
             android:contentDescription="@string/action_share"
-
+            android:elevation="@dimen/fab_elevation"
             android:src="@drawable/ic_share" />
 
         <com.example.xyzreader.ui.ObservableScrollView
