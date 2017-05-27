@@ -17,7 +17,7 @@
 
 <resources>
     <color name="photo_placeholder">#ccc</color>
-    <color name="dark_text">#fa0000</color>
+    <color name="dark_text">#b3b2b2</color>
     <color name="light_text">#f4f4f4</color>
 
     <color name="theme_primary">#9C27B0</color>

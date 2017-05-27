@@ -8,14 +8,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
-
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -24,14 +17,10 @@ import android.support.v7.graphics.Palette;
 import android.text.Html;
 import android.text.format.DateUtils;
 import android.text.method.LinkMovementMethod;
-import android.transition.Slide;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,6 +29,11 @@ import com.android.volley.toolbox.ImageLoader;
 import com.example.xyzreader.R;
 import com.example.xyzreader.data.ArticleLoader;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 /**
  * A fragment representing a single Article detail screen. This fragment is
  * either contained in a {@link ArticleListActivity} in two-pane mode (on
@@ -47,9 +41,8 @@ import com.example.xyzreader.data.ArticleLoader;
  */
 public class ArticleDetailFragment extends Fragment implements
         LoaderManager.LoaderCallbacks<Cursor> {
-    private static final String TAG = "ArticleDetailFragment";
-
     public static final String ARG_ITEM_ID = "item_id";
+    private static final String TAG = "ArticleDetailFragment";
     private static final float PARALLAX_FACTOR = 1.25f;
 
     private Cursor mCursor;
@@ -71,7 +64,7 @@ public class ArticleDetailFragment extends Fragment implements
     // Use default locale format
     private SimpleDateFormat outputFormat = new SimpleDateFormat();
     // Most time functions can only handle 1902 - 2037
-    private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2,1,1);
+    private GregorianCalendar START_OF_EPOCH = new GregorianCalendar(2, 1, 1);
 
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -87,24 +80,37 @@ public class ArticleDetailFragment extends Fragment implements
 
         ArticleDetailFragment fragment = new ArticleDetailFragment();
         fragment.setArguments(arguments);
-        Slide slide = null;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-            slide = new Slide(Gravity.RIGHT);
-            slide.addTarget(R.id.textlayout);
-
-            slide.setDuration(300);
-            fragment.setSharedElementEnterTransition(slide);
-            fragment.setAllowEnterTransitionOverlap(true);
-        }
+//        Slide slide = null;
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//
+//            slide = new Slide(Gravity.RIGHT);
+//            slide.addTarget(R.id.textlayout);
+//
+//            slide.setDuration(300);
+//            fragment.setSharedElementEnterTransition(slide);
+//            fragment.setAllowEnterTransitionOverlap(true);
+//        }
 
         return fragment;
+    }
+
+    static float progress(float v, float min, float max) {
+        return constrain((v - min) / (max - min), 0, 1);
+    }
+
+    static float constrain(float val, float min, float max) {
+        if (val < min) {
+            return min;
+        } else if (val > max) {
+            return max;
+        } else {
+            return val;
+        }
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
@@ -116,7 +122,6 @@ public class ArticleDetailFragment extends Fragment implements
                 R.dimen.detail_card_top_margin);
         setHasOptionsMenu(true);
     }
-
 
     public ArticleDetailActivity getActivityCast() {
         return (ArticleDetailActivity) getActivity();
@@ -135,7 +140,7 @@ public class ArticleDetailFragment extends Fragment implements
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_article_detail, container, false);
         mDrawInsetsFrameLayout = (DrawInsetsFrameLayout)
                 mRootView.findViewById(R.id.draw_insets_frame_layout);
@@ -145,7 +150,6 @@ public class ArticleDetailFragment extends Fragment implements
                 mTopInset = insets.top;
             }
         });
-
 
 
         mScrollView = (ObservableScrollView) mRootView.findViewById(R.id.scrollview);
@@ -203,20 +207,6 @@ public class ArticleDetailFragment extends Fragment implements
         mDrawInsetsFrameLayout.setInsetBackground(mStatusBarColorDrawable);
     }
 
-    static float progress(float v, float min, float max) {
-        return constrain((v - min) / (max - min), 0, 1);
-    }
-
-    static float constrain(float val, float min, float max) {
-        if (val < min) {
-            return min;
-        } else if (val > max) {
-            return max;
-        } else {
-            return val;
-        }
-    }
-
     private Date parsePublishedDate() {
         try {
             String date = mCursor.getString(ArticleLoader.Query.PUBLISHED_DATE);
@@ -239,7 +229,7 @@ public class ArticleDetailFragment extends Fragment implements
         TextView bodyView = (TextView) mRootView.findViewById(R.id.article_body);
 
 
-       // bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
+        // bodyView.setTypeface(Typeface.createFromAsset(getResources().getAssets(), "Rosario-Regular.ttf"));
 
         if (mCursor != null) {
             mRootView.setAlpha(0);
@@ -261,18 +251,24 @@ public class ArticleDetailFragment extends Fragment implements
                 // If date is before 1902, just show the string
                 bylineView.setText(Html.fromHtml(
                         outputFormat.format(publishedDate) + " by <font color='#ffffff'>"
-                        + mCursor.getString(ArticleLoader.Query.AUTHOR)
+                                + mCursor.getString(ArticleLoader.Query.AUTHOR)
                                 + "</font>"));
 
             }
-            bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />")));
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />"), Html.FROM_HTML_MODE_LEGACY));
+            } else {
+                bodyView.setText(Html.fromHtml(mCursor.getString(ArticleLoader.Query.BODY).replaceAll("(\r\n|\n)", "<br />")));
+            }
+
             ImageLoaderHelper.getInstance(getActivity()).getImageLoader()
                     .get(mCursor.getString(ArticleLoader.Query.PHOTO_URL), new ImageLoader.ImageListener() {
                         @Override
                         public void onResponse(ImageLoader.ImageContainer imageContainer, boolean b) {
                             Bitmap bitmap = imageContainer.getBitmap();
                             if (bitmap != null) {
-                                Palette p = Palette.generate(bitmap, 12);
+
+                                Palette p = Palette.from(bitmap).generate();
                                 mMutedColor = p.getDarkMutedColor(0xFF333333);
                                 mPhotoView.setImageBitmap(imageContainer.getBitmap());
                                 mRootView.findViewById(R.id.meta_bar)
@@ -289,7 +285,7 @@ public class ArticleDetailFragment extends Fragment implements
         } else {
             mRootView.setVisibility(View.GONE);
             titleView.setText("N/A");
-            bylineView.setText("N/A" );
+            bylineView.setText("N/A");
             bodyView.setText("N/A");
         }
     }
